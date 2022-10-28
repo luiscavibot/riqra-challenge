@@ -1,5 +1,7 @@
 import express, { Application } from 'express';
 import promotionRoutes from '../routes/promotions';
+import cartsRoutes from '../routes/carts';
+import productsRoutes from '../routes/products';
 import cors from 'cors';
 import db from '../db/connection';
 class Server {
@@ -7,6 +9,8 @@ class Server {
 	private port: string;
 	private apiPaths = {
 		promotions: 'promotions',
+		carts: 'carts',
+		products: 'products',
 	};
 
 	constructor() {
@@ -35,6 +39,8 @@ class Server {
 	}
 	routes() {
 		this.app.use('/api/v1/' + this.apiPaths.promotions, promotionRoutes);
+		this.app.use('/api/v1/' + this.apiPaths.carts, cartsRoutes);
+		this.app.use('/api/v1/' + this.apiPaths.products, productsRoutes);
 	}
 	listen() {
 		this.app.listen(this.port, () => {

@@ -14,12 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const promotions_1 = __importDefault(require("../routes/promotions"));
+const carts_1 = __importDefault(require("../routes/carts"));
+const products_1 = __importDefault(require("../routes/products"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
     constructor() {
         this.apiPaths = {
             promotions: 'promotions',
+            carts: 'carts',
+            products: 'products',
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -49,6 +53,8 @@ class Server {
     }
     routes() {
         this.app.use('/api/v1/' + this.apiPaths.promotions, promotions_1.default);
+        this.app.use('/api/v1/' + this.apiPaths.carts, carts_1.default);
+        this.app.use('/api/v1/' + this.apiPaths.products, products_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {
