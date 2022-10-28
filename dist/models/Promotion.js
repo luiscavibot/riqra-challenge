@@ -26,6 +26,10 @@ exports.Promotion = connection_1.default.define('promotions', {
         type: sequelize_1.DataTypes.DATE,
         allowNull: false,
     },
+    activated: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 });
 exports.Promotion.hasMany(Rule_1.Rule, {
     foreignKey: 'promotionId',

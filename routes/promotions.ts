@@ -3,6 +3,7 @@ import { createPromotion, getPromotions } from '../controllers/promotions';
 import { check } from 'express-validator';
 import { validateFields } from '../middlewares/validateFields';
 import { validatePeriod } from '../middlewares/validatePeriod';
+import { validateActivatedPromotions } from '../middlewares/validateActivatedPromotions';
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.post(
 			.not()
 			.isEmpty(),
 		validatePeriod,
+		validateActivatedPromotions,
 		validateFields,
 	],
 	createPromotion

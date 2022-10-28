@@ -5,6 +5,7 @@ const promotions_1 = require("../controllers/promotions");
 const express_validator_1 = require("express-validator");
 const validateFields_1 = require("../middlewares/validateFields");
 const validatePeriod_1 = require("../middlewares/validatePeriod");
+const validateActivatedPromotions_1 = require("../middlewares/validateActivatedPromotions");
 const router = (0, express_1.Router)();
 router.get('/', promotions_1.getPromotions);
 router.post('/', [
@@ -22,6 +23,7 @@ router.post('/', [
         .not()
         .isEmpty(),
     validatePeriod_1.validatePeriod,
+    validateActivatedPromotions_1.validateActivatedPromotions,
     validateFields_1.validateFields,
 ], promotions_1.createPromotion);
 exports.default = router;

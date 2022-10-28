@@ -5,8 +5,13 @@ import { Promotion } from '../models/Promotion';
 import { Rule } from '../models/Rule';
 
 export const createPromotion = async (req: Request, res: Response) => {
-	const { name, rules, validityPeriodStart, validityPeriodExpiration } =
-		req.body;
+	const {
+		name,
+		rules,
+		validityPeriodStart,
+		validityPeriodExpiration,
+		activated,
+	} = req.body;
 	try {
 		async function createPromotion() {
 			return await Promotion.create({
@@ -14,6 +19,7 @@ export const createPromotion = async (req: Request, res: Response) => {
 				rules,
 				validityPeriodStart,
 				validityPeriodExpiration,
+				activated,
 			});
 		}
 		async function createRules(newPromotion: any) {

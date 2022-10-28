@@ -22,6 +22,10 @@ export const Promotion = db.define('promotions', {
 		type: DataTypes.DATE,
 		allowNull: false,
 	},
+	activated: {
+		type: DataTypes.BOOLEAN,
+		defaultValue: false,
+	},
 });
 
 Promotion.hasMany(Rule, {

@@ -14,7 +14,7 @@ const Action_1 = require("../models/Action");
 const Promotion_1 = require("../models/Promotion");
 const Rule_1 = require("../models/Rule");
 const createPromotion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, rules, validityPeriodStart, validityPeriodExpiration } = req.body;
+    const { name, rules, validityPeriodStart, validityPeriodExpiration, activated, } = req.body;
     try {
         function createPromotion() {
             return __awaiter(this, void 0, void 0, function* () {
@@ -23,6 +23,7 @@ const createPromotion = (req, res) => __awaiter(void 0, void 0, void 0, function
                     rules,
                     validityPeriodStart,
                     validityPeriodExpiration,
+                    activated,
                 });
             });
         }
