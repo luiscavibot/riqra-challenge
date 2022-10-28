@@ -4,6 +4,7 @@ import { check } from 'express-validator';
 import { validateFields } from '../middlewares/validateFields';
 import { validatePeriod } from '../middlewares/validatePeriod';
 import { validateActivatedPromotions } from '../middlewares/validateActivatedPromotions';
+import { rulesType } from '../config/rules';
 
 const router = Router();
 
@@ -30,6 +31,19 @@ router.post(
 			.isEmpty(),
 		validatePeriod,
 		validateActivatedPromotions,
+		check('rules', 'Rules are required').not().isEmpty(),
+		check('rules', 'Rules should be an array').isArray(),
+		check('rules.*.ruleType', 'Rule type is required').not().isEmpty(),
+		check('rules.*.ruleType', 'Rule type should be a string').isString(),
+		check(
+			'rules.*.ruleType',
+			`Rule type should be: ${rulesType.join(' or ')}`
+		).isIn(rulesType),
+		check('rules.*.actions', 'Actions are required').not().isEmpty(),
+		check('rules.*.actions', 'Actions should be an array').isArray(),
+		check('rules.*.actions', 'Actions should be greater than 0').isLength({
+			min: 1,
+		}),
 		validateFields,
 	],
 	createPromotion

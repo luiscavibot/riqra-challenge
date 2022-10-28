@@ -14,7 +14,7 @@ const Action_1 = require("../models/Action");
 const Promotion_1 = require("../models/Promotion");
 const Rule_1 = require("../models/Rule");
 const createPromotion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, rules, validityPeriodStart, validityPeriodExpiration, activated, } = req.body;
+    const { name, rules, validityPeriodStart, validityPeriodExpiration, activated, skus, greaterThan, } = req.body;
     try {
         function createPromotion() {
             return __awaiter(this, void 0, void 0, function* () {
@@ -30,10 +30,12 @@ const createPromotion = (req, res) => __awaiter(void 0, void 0, void 0, function
         function createRules(newPromotion) {
             return __awaiter(this, void 0, void 0, function* () {
                 rules.forEach((rule) => __awaiter(this, void 0, void 0, function* () {
-                    let { ruleType } = rule;
+                    let { ruleType, skus, greaterThan } = rule;
                     let newRule = yield Rule_1.Rule.create({
                         ruleType,
                         promotionId: newPromotion.id,
+                        skus,
+                        greaterThan,
                     });
                     yield createActions(newRule.id, rule.actions);
                 }));

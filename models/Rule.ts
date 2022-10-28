@@ -15,6 +15,14 @@ export const Rule = db.define(
 			type: DataTypes.ENUM,
 			values: rulesType,
 		},
+		skus: {
+			type: DataTypes.JSON,
+			defaultValue: null,
+		},
+		greaterThan: {
+			type: DataTypes.FLOAT,
+			defaultValue: null,
+		},
 	},
 	{
 		timestamps: false,

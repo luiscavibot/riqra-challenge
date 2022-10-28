@@ -11,6 +11,8 @@ export const createPromotion = async (req: Request, res: Response) => {
 		validityPeriodStart,
 		validityPeriodExpiration,
 		activated,
+		skus,
+		greaterThan,
 	} = req.body;
 	try {
 		async function createPromotion() {
@@ -24,10 +26,12 @@ export const createPromotion = async (req: Request, res: Response) => {
 		}
 		async function createRules(newPromotion: any) {
 			rules.forEach(async (rule: any) => {
-				let { ruleType } = rule;
+				let { ruleType, skus, greaterThan } = rule;
 				let newRule: any = await Rule.create({
 					ruleType,
 					promotionId: newPromotion.id,
+					skus,
+					greaterThan,
 				});
 				await createActions(newRule.id, rule.actions);
 			});

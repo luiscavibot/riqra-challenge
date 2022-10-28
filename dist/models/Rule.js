@@ -18,6 +18,14 @@ exports.Rule = connection_1.default.define('rules', {
         type: sequelize_1.DataTypes.ENUM,
         values: rules_1.rulesType,
     },
+    skus: {
+        type: sequelize_1.DataTypes.JSON,
+        defaultValue: null,
+    },
+    greaterThan: {
+        type: sequelize_1.DataTypes.FLOAT,
+        defaultValue: null,
+    },
 }, {
     timestamps: false,
 });
