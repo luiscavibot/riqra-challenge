@@ -1,0 +1,30 @@
+{
+	"name": "PAGAYAPE",
+	"validityPeriodStart": "2022-10-27",
+	"validityPeriodExpiration": "2022-10-27",
+	"activated": false,
+	"rules": [
+		{
+			"ruleType": "PRODUCTSELECTOR",
+			"actions": [
+				{
+					"actionType": "CARTDISCOUNT",
+					"discountType": "FIXED",
+					"discountValue": 20
+				}
+			],
+			"skus": ["unproductito", "otroproductito"]
+		},
+		{
+			"ruleType": "CARTTOTAL",
+			"actions": [
+				{
+					"actionType": "CARTDISCOUNT",
+					"discountType": "PERCENTAGE",
+					"discountValue": 50
+				}
+			],
+			"greaterThan": 200
+		}
+	]
+}

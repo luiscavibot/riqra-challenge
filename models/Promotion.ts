@@ -15,11 +15,11 @@ export const Promotion = db.define('promotions', {
 		unique: true,
 	},
 	validityPeriodStart: {
-		type: DataTypes.DATE,
+		type: DataTypes.DATEONLY,
 		allowNull: false,
 	},
 	validityPeriodExpiration: {
-		type: DataTypes.DATE,
+		type: DataTypes.DATEONLY,
 		allowNull: false,
 	},
 	activated: {

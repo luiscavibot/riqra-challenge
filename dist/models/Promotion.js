@@ -19,11 +19,11 @@ exports.Promotion = connection_1.default.define('promotions', {
         unique: true,
     },
     validityPeriodStart: {
-        type: sequelize_1.DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATEONLY,
         allowNull: false,
     },
     validityPeriodExpiration: {
-        type: sequelize_1.DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATEONLY,
         allowNull: false,
     },
     activated: {
