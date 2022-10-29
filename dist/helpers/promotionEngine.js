@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluatePromotions = void 0;
+exports.evaluatePromotions = exports.calculateSubTotal = void 0;
 const sequelize_1 = require("sequelize");
 const rules_1 = require("../config/rules");
 const actions_1 = require("../config/actions");
@@ -50,8 +50,7 @@ function calculateTotal(lineItems) {
     return lineItemsTotal;
 }
 function aplicatePercentageDiscountType(subtotal, discountValue) {
-    let totalDiscount = subtotal * discountValue;
-    console.log('totalDiscount...', totalDiscount);
+    let totalDiscount = (subtotal * discountValue) / 100;
     return parseFloat(totalDiscount.toFixed(2));
 }
 function aplicateFixedDiscountType(discountValue) {
@@ -65,11 +64,10 @@ function calculateSubTotal(lineItems) {
     const subTotal = parseFloat((lineItemsTotal - taxes).toFixed(2));
     return subTotal;
 }
+exports.calculateSubTotal = calculateSubTotal;
 function aplicateCartDiscountActionType(discountType, lineItems, discountValue) {
     if (discountType === actions_1.discountsType[0]) {
         let subtotal = calculateSubTotal(lineItems);
-        console.log('subtotal...', subtotal);
-        console.log('discountValue...', discountValue);
         return aplicatePercentageDiscountType(subtotal, discountValue);
     }
     if (discountType === actions_1.discountsType[1]) {
@@ -80,10 +78,8 @@ function aplicateActions(actions, lineItems) {
     let totalDiscount = 0;
     actions.forEach((action) => {
         let { actionType, discountType, discountValue } = action.dataValues;
-        console.log('actionType, discountType, discountValue.... ', actionType, discountType, discountValue);
-        console.log('lineItems...', lineItems);
         if (actionType === actions_1.actionsType[0]) {
-            totalDiscount = +aplicateCartDiscountActionType(discountType, lineItems, discountValue);
+            totalDiscount += aplicateCartDiscountActionType(discountType, lineItems, discountValue);
         }
     });
     return totalDiscount;
@@ -113,20 +109,10 @@ function evaluateRules(validatedPromotions, lineItems) {
     let evaluateRulesResponse = [];
     validatedPromotions.forEach((promotion) => {
         promotion.dataValues.rules.forEach((rule) => {
-            // console.log('rule', rule.dataValues);
             let { ruleType, skus, greaterThan } = rule.dataValues;
-            // console.log(
-            // 	'ruleType,skus,greaterThan ...',
-            // 	ruleType,
-            // 	skus,
-            // 	greaterThan
-            // );
             let isValidatedRule = validateRuleType(ruleType, skus, greaterThan, lineItems);
-            console.log('isValidatedRule', isValidatedRule);
             if (isValidatedRule) {
                 let totalDiscount = aplicateActions(rule.actions, lineItems);
-                console.log('*totalDiscount*', totalDiscount);
-                console.log('promotion.name....', promotion.name);
                 evaluateRulesResponse.push({
                     promotionName: promotion.name,
                     totalDiscount,
@@ -134,7 +120,6 @@ function evaluateRules(validatedPromotions, lineItems) {
             }
         });
     });
-    console.log('evaluateRulesResponse....', evaluateRulesResponse);
     return evaluateRulesResponse;
 }
 const evaluatePromotions = (lineItems) => __awaiter(void 0, void 0, void 0, function* () {

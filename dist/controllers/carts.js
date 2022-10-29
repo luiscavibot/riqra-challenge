@@ -15,17 +15,35 @@ const promotionEngine_1 = require("../helpers/promotionEngine");
 const createCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { lineItems } = req.body;
     const evaluatePromotionsResult = yield (0, promotionEngine_1.evaluatePromotions)(lineItems);
+    const sortedTotalDiscounts = evaluatePromotionsResult.sort((a, b) => a.totalDiscount - b.totalDiscount);
+    let finaltotalDiscount = 0;
+    const subTotal = (0, promotionEngine_1.calculateSubTotal)(lineItems);
+    let validDiscounts = [];
+    let discountAccumulator = 0;
+    sortedTotalDiscounts.forEach((discount) => {
+        discountAccumulator += discount.totalDiscount;
+        if (discountAccumulator > subTotal) {
+            return;
+        }
+        finaltotalDiscount = discountAccumulator;
+        validDiscounts.push(discount);
+    });
     const lineItemsTotal = lineItems.reduce((acc, lineItem) => {
         return acc + lineItem.qty * lineItem.price;
     }, 0);
-    const taxes = parseFloat((lineItemsTotal * consts_1.TAX).toFixed(2));
-    const subTotal = parseFloat((lineItemsTotal - taxes).toFixed(2));
+    // const taxes = parseFloat((lineItemsTotal * TAX).toFixed(2));
+    let subtotalWithDiscounts = parseFloat((subTotal - finaltotalDiscount).toFixed(2));
+    let taxes = parseFloat((subtotalWithDiscounts * consts_1.TAX).toFixed(2));
+    let totalToPay = parseFloat((subtotalWithDiscounts + taxes).toFixed(2));
     return res.status(201).json({
         data: {
             lineItemsTotal,
-            taxes,
+            discountsList: validDiscounts,
+            discountAmount: parseFloat(finaltotalDiscount.toFixed(2)),
             subTotal,
-            evaluatePromotionsResult,
+            subtotalWithDiscounts,
+            taxes,
+            totalToPay,
         },
         message: 'Cart created successfully',
         lineItems,

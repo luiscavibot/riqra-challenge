@@ -39,8 +39,7 @@ function calculateTotal(lineItems: any) {
 }
 
 function aplicatePercentageDiscountType(subtotal: any, discountValue: any) {
-	let totalDiscount = subtotal * discountValue;
-	console.log('totalDiscount...', totalDiscount);
+	let totalDiscount = (subtotal * discountValue) / 100;
 
 	return parseFloat(totalDiscount.toFixed(2));
 }
@@ -48,7 +47,7 @@ function aplicateFixedDiscountType(discountValue: any) {
 	return discountValue;
 }
 
-function calculateSubTotal(lineItems: any) {
+export function calculateSubTotal(lineItems: any) {
 	const lineItemsTotal = lineItems.reduce((acc: number, lineItem: any) => {
 		return acc + lineItem.qty * lineItem.price;
 	}, 0);
@@ -63,9 +62,6 @@ function aplicateCartDiscountActionType(
 ) {
 	if (discountType === discountsType[0]) {
 		let subtotal = calculateSubTotal(lineItems);
-		console.log('subtotal...', subtotal);
-		console.log('discountValue...', discountValue);
-
 		return aplicatePercentageDiscountType(subtotal, discountValue);
 	}
 	if (discountType === discountsType[1]) {
@@ -77,16 +73,9 @@ function aplicateActions(actions: any, lineItems: any) {
 	let totalDiscount = 0;
 	actions.forEach((action: any) => {
 		let { actionType, discountType, discountValue } = action.dataValues;
-		console.log(
-			'actionType, discountType, discountValue.... ',
-			actionType,
-			discountType,
-			discountValue
-		);
-		console.log('lineItems...', lineItems);
 
 		if (actionType === actionsType[0]) {
-			totalDiscount = +aplicateCartDiscountActionType(
+			totalDiscount += aplicateCartDiscountActionType(
 				discountType,
 				lineItems,
 				discountValue
@@ -129,27 +118,16 @@ function evaluateRules(validatedPromotions: any, lineItems: any) {
 	let evaluateRulesResponse: any[] = [];
 	validatedPromotions.forEach((promotion: any) => {
 		promotion.dataValues.rules.forEach((rule: any) => {
-			// console.log('rule', rule.dataValues);
 			let { ruleType, skus, greaterThan } = rule.dataValues;
-			// console.log(
-			// 	'ruleType,skus,greaterThan ...',
-			// 	ruleType,
-			// 	skus,
-			// 	greaterThan
-			// );
+
 			let isValidatedRule = validateRuleType(
 				ruleType,
 				skus,
 				greaterThan,
 				lineItems
 			);
-			console.log('isValidatedRule', isValidatedRule);
-
 			if (isValidatedRule) {
 				let totalDiscount = aplicateActions(rule.actions, lineItems);
-				console.log('*totalDiscount*', totalDiscount);
-				console.log('promotion.name....', promotion.name);
-
 				evaluateRulesResponse.push({
 					promotionName: promotion.name,
 					totalDiscount,
@@ -157,8 +135,6 @@ function evaluateRules(validatedPromotions: any, lineItems: any) {
 			}
 		});
 	});
-	console.log('evaluateRulesResponse....', evaluateRulesResponse);
-
 	return evaluateRulesResponse;
 }
 
