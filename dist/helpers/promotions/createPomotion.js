@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createActions = exports.createRules = void 0;
+exports.verifyUniquePromotionName = exports.createActions = exports.createRules = void 0;
 const Action_1 = require("../../models/Action");
+const Promotion_1 = require("../../models/Promotion");
 const Rule_1 = require("../../models/Rule");
 function createRules(newPromotion, rules) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -41,4 +42,17 @@ function createActions(newRule_id, rule_actions) {
     });
 }
 exports.createActions = createActions;
+const verifyUniquePromotionName = (name) => {
+    return new Promise((resolve, reject) => {
+        Promotion_1.Promotion.findOne({ where: { name } }).then((promotion) => {
+            if (promotion) {
+                reject(new Error('Name already in use. Please choose another one'));
+            }
+            else {
+                resolve(true);
+            }
+        });
+    });
+};
+exports.verifyUniquePromotionName = verifyUniquePromotionName;
 //# sourceMappingURL=createPomotion.js.map

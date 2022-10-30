@@ -10,7 +10,7 @@ import { validateFields } from '../middlewares/validateFields';
 import { validatePeriod } from '../middlewares/validatePeriod';
 import { validateActivatedPromotions } from '../middlewares/validateActivatedPromotions';
 import { rulesType } from '../config/rules';
-import { Promotion } from '../models/Promotion';
+import { verifyUniquePromotionName } from '../helpers/promotions/createPomotion';
 
 const router = Router();
 
@@ -29,21 +29,9 @@ router.post(
 	'/',
 	[
 		check('name', 'Name is required').not().isEmpty(),
-		check('name', 'Name be should be unique').custom((name) => {
-			return new Promise((resolve, reject) => {
-				Promotion.findOne({ where: { name } }).then((promotion) => {
-					if (promotion) {
-						reject(
-							new Error(
-								'Name already in use. Please choose another one'
-							)
-						);
-					} else {
-						resolve(true);
-					}
-				});
-			});
-		}),
+		check('name', 'Name be should be unique').custom(
+			verifyUniquePromotionName
+		),
 		check('name', 'Name should have minimum 3 characters').isLength({
 			min: 3,
 		}),

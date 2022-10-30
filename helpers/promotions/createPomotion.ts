@@ -1,4 +1,5 @@
 import { Action } from '../../models/Action';
+import { Promotion } from '../../models/Promotion';
 import { Rule } from '../../models/Rule';
 
 export async function createRules(newPromotion: any, rules: any) {
@@ -25,3 +26,17 @@ export async function createActions(newRule_id: any, rule_actions: any) {
 		});
 	});
 }
+
+export const verifyUniquePromotionName = (name: string) => {
+	return new Promise((resolve, reject) => {
+		Promotion.findOne({ where: { name } }).then((promotion) => {
+			if (promotion) {
+				reject(
+					new Error('Name already in use. Please choose another one')
+				);
+			} else {
+				resolve(true);
+			}
+		});
+	});
+};
