@@ -2,7 +2,11 @@ import { Model, Op } from 'sequelize';
 import { Promotion } from '../../models/Promotion';
 import { Rule } from '../../models/Rule';
 import { Action } from '../../models/Action';
-import { PromotionType } from '../../interfaces/promotions';
+import {
+	EvaluatePromotionsResponse,
+	PromotionType,
+	RuleType,
+} from '../../interfaces/promotions';
 import { LineItem } from '../../interfaces/cart';
 import { validateRuleType } from './validateRuleType';
 import { aplicateActions } from './aplicateAction';
@@ -36,9 +40,9 @@ function evaluateRules(
 	validatedPromotions: Model<PromotionType>[],
 	lineItems: LineItem[]
 ) {
-	let evaluateRulesResponse: any[] = [];
-	validatedPromotions.forEach((promotion: any) => {
-		promotion.dataValues.rules.forEach((rule: any) => {
+	let evaluateRulesResponse: EvaluatePromotionsResponse[] = [];
+	validatedPromotions.forEach((promotion: Model<PromotionType>) => {
+		promotion.getDataValue('rules').forEach((rule: RuleType) => {
 			let { ruleType, skus, greaterThan } = rule.dataValues;
 
 			let isValidatedRule = validateRuleType(
@@ -50,7 +54,7 @@ function evaluateRules(
 			if (isValidatedRule) {
 				let totalDiscount = aplicateActions(rule.actions, lineItems);
 				evaluateRulesResponse.push({
-					promotionName: promotion.name,
+					promotionName: promotion.getDataValue('name'),
 					totalDiscount,
 				});
 			}
@@ -61,7 +65,7 @@ function evaluateRules(
 
 export const evaluatePromotions = async (
 	lineItems: LineItem[]
-): Promise<PromotionType[] | undefined> => {
+): Promise<EvaluatePromotionsResponse[] | undefined> => {
 	try {
 		const validatedPromotions = await getValidPromotions();
 		let evaluateRulesResponse = evaluateRules(

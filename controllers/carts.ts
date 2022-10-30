@@ -2,18 +2,20 @@ import { Request, Response } from 'express';
 import { TAX } from '../config/consts';
 import { calculateSubTotal } from '../helpers/others/caculateSubtotal';
 import { evaluatePromotions } from '../helpers/promotions/promotionEngine';
+import { LineItem } from '../interfaces/cart';
+import { EvaluatePromotionsResponse as Discount } from '../interfaces/promotions';
 
 export const createCart = async (req: Request, res: Response) => {
 	const { lineItems } = req.body;
 	const evaluatePromotionsResult = await evaluatePromotions(lineItems);
 	const sortedTotalDiscounts = evaluatePromotionsResult!.sort(
-		(a: any, b: any) => a.totalDiscount - b.totalDiscount
+		(a: Discount, b: Discount) => a.totalDiscount - b.totalDiscount
 	);
 	let finaltotalDiscount = 0;
 	const subTotal = calculateSubTotal(lineItems);
-	let validDiscounts: any[] = [];
+	let validDiscounts: Discount[] = [];
 	let discountAccumulator = 0;
-	sortedTotalDiscounts.forEach((discount: any) => {
+	sortedTotalDiscounts.forEach((discount: Discount) => {
 		discountAccumulator += discount.totalDiscount;
 		if (discountAccumulator > subTotal) {
 			return;
@@ -22,9 +24,12 @@ export const createCart = async (req: Request, res: Response) => {
 		validDiscounts.push(discount);
 	});
 
-	const lineItemsTotal = lineItems.reduce((acc: number, lineItem: any) => {
-		return acc + lineItem.qty * lineItem.price;
-	}, 0);
+	const lineItemsTotal = lineItems.reduce(
+		(acc: number, lineItem: LineItem) => {
+			return acc + lineItem.qty * lineItem.price;
+		},
+		0
+	);
 
 	// const taxes = parseFloat((lineItemsTotal * TAX).toFixed(2));
 	let subtotalWithDiscounts = parseFloat(

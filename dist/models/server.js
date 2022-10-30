@@ -45,7 +45,7 @@ class Server {
                 console.log('Database online');
             }
             catch (error) {
-                throw new Error(error);
+                console.error(error);
             }
         });
     }

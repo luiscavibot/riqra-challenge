@@ -9,19 +9,26 @@ export interface PromotionType {
 	validityPeriodStart: Date;
 	validityPeriodExpiration: Date;
 	activated: boolean;
-	createdAt?: Date;
-	updatedAt?: Date;
-	rules: Rule[];
+	createdAt: Date;
+	updatedAt: Date;
+	rules: RuleType[];
 }
 
-export interface Rule {
+export interface RuleType {
 	id?: number;
 	ruleType: string;
-	skus?: null | string[];
+	skus: string[];
 	greaterThan: number;
 	promotionId?: number;
 	actions: ActionType[];
+	dataValues: RuleType;
 }
+
+// interface DataValuesType {
+// 	ruleType: string;
+// 	skus: string[];
+// 	greaterThan: number;
+// }
 
 export interface ActionType {
 	id?: number;
@@ -29,5 +36,6 @@ export interface ActionType {
 	discountType: string;
 	discountValue: number;
 	ruleId?: number;
+	dataValues: ActionType;
 }
 //Creation of a new promotion

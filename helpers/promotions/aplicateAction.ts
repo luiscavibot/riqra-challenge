@@ -11,7 +11,7 @@ function aplicatePercentageDiscountType(
 
 	return parseFloat(totalDiscount.toFixed(2));
 }
-function aplicateFixedDiscountType(discountValue: any) {
+function aplicateFixedDiscountType(discountValue: number) {
 	return discountValue;
 }
 
@@ -27,11 +27,12 @@ function aplicateCartDiscountActionType(
 	if (discountType === discountsType[1]) {
 		return aplicateFixedDiscountType(discountValue);
 	}
+	return 0;
 }
 
 export function aplicateActions(actions: ActionType[], lineItems: LineItem[]) {
 	let totalDiscount = 0;
-	actions.forEach((action: any) => {
+	actions.forEach((action) => {
 		let { actionType, discountType, discountValue } = action.dataValues;
 
 		if (actionType === actionsType[0]) {

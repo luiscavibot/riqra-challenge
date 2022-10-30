@@ -1,22 +1,34 @@
+import { Model } from 'sequelize';
+import {
+	ActionType,
+	PromotionType,
+	RuleType,
+} from '../../interfaces/promotions';
 import { Action } from '../../models/Action';
 import { Promotion } from '../../models/Promotion';
 import { Rule } from '../../models/Rule';
 
-export async function createRules(newPromotion: any, rules: any) {
-	rules.forEach(async (rule: any) => {
+export async function createRules(
+	newPromotion: Model<PromotionType>,
+	rules: RuleType[]
+) {
+	rules.forEach(async (rule) => {
 		let { ruleType, skus, greaterThan } = rule;
-		let newRule: any = await Rule.create({
+		let newRule = await Rule.create({
 			ruleType,
-			promotionId: newPromotion.id,
+			promotionId: newPromotion.getDataValue('id'),
 			skus,
 			greaterThan,
 		});
-		await createActions(newRule.id, rule.actions);
+		await createActions(newRule.getDataValue('id'), rule.actions);
 	});
 }
 
-export async function createActions(newRule_id: any, rule_actions: any) {
-	rule_actions.forEach(async (action: any) => {
+export async function createActions(
+	newRule_id: string,
+	rule_actions: ActionType[]
+) {
+	rule_actions.forEach(async (action) => {
 		let { actionType, discountType, discountValue } = action;
 		await Action.create({
 			actionType,

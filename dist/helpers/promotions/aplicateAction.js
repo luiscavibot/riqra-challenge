@@ -18,6 +18,7 @@ function aplicateCartDiscountActionType(discountType, lineItems, discountValue) 
     if (discountType === actions_1.discountsType[1]) {
         return aplicateFixedDiscountType(discountValue);
     }
+    return 0;
 }
 function aplicateActions(actions, lineItems) {
     let totalDiscount = 0;

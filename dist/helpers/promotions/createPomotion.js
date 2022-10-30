@@ -19,11 +19,11 @@ function createRules(newPromotion, rules) {
             let { ruleType, skus, greaterThan } = rule;
             let newRule = yield Rule_1.Rule.create({
                 ruleType,
-                promotionId: newPromotion.id,
+                promotionId: newPromotion.getDataValue('id'),
                 skus,
                 greaterThan,
             });
-            yield createActions(newRule.id, rule.actions);
+            yield createActions(newRule.getDataValue('id'), rule.actions);
         }));
     });
 }

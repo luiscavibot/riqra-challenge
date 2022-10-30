@@ -31,8 +31,8 @@ class Server {
 			await db.authenticate();
 			await db.sync();
 			console.log('Database online');
-		} catch (error: any) {
-			throw new Error(error);
+		} catch (error) {
+			console.error(error);
 		}
 	}
 	routes() {

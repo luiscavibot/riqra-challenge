@@ -45,13 +45,13 @@ function getValidPromotions() {
 function evaluateRules(validatedPromotions, lineItems) {
     let evaluateRulesResponse = [];
     validatedPromotions.forEach((promotion) => {
-        promotion.dataValues.rules.forEach((rule) => {
+        promotion.getDataValue('rules').forEach((rule) => {
             let { ruleType, skus, greaterThan } = rule.dataValues;
             let isValidatedRule = (0, validateRuleType_1.validateRuleType)(ruleType, skus, greaterThan, lineItems);
             if (isValidatedRule) {
                 let totalDiscount = (0, aplicateAction_1.aplicateActions)(rule.actions, lineItems);
                 evaluateRulesResponse.push({
-                    promotionName: promotion.name,
+                    promotionName: promotion.getDataValue('name'),
                     totalDiscount,
                 });
             }
