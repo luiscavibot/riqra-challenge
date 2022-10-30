@@ -4,6 +4,7 @@ import cartsRoutes from '../routes/carts';
 import productsRoutes from '../routes/products';
 import cors from 'cors';
 import db from '../db/connection';
+import { generalPath } from '../config/general';
 class Server {
 	private app: Application;
 	private port: string;
@@ -21,11 +22,8 @@ class Server {
 		this.dbConnection();
 	}
 	middlewares() {
-		// CORS
 		this.app.use(cors());
-		// Lectura y parseo del body
 		this.app.use(express.json());
-		// Directorio público
 		this.app.use(express.static('public'));
 	}
 	async dbConnection() {
@@ -38,9 +36,9 @@ class Server {
 		}
 	}
 	routes() {
-		this.app.use('/api/v1/' + this.apiPaths.promotions, promotionRoutes);
-		this.app.use('/api/v1/' + this.apiPaths.carts, cartsRoutes);
-		this.app.use('/api/v1/' + this.apiPaths.products, productsRoutes);
+		this.app.use(generalPath + this.apiPaths.promotions, promotionRoutes);
+		this.app.use(generalPath + this.apiPaths.carts, cartsRoutes);
+		this.app.use(generalPath + this.apiPaths.products, productsRoutes);
 	}
 	listen() {
 		this.app.listen(this.port, () => {

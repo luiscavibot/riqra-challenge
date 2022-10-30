@@ -18,6 +18,7 @@ const carts_1 = __importDefault(require("../routes/carts"));
 const products_1 = __importDefault(require("../routes/products"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
+const general_1 = require("../config/general");
 class Server {
     constructor() {
         this.apiPaths = {
@@ -32,11 +33,8 @@ class Server {
         this.dbConnection();
     }
     middlewares() {
-        // CORS
         this.app.use((0, cors_1.default)());
-        // Lectura y parseo del body
         this.app.use(express_1.default.json());
-        // Directorio público
         this.app.use(express_1.default.static('public'));
     }
     dbConnection() {
@@ -52,9 +50,9 @@ class Server {
         });
     }
     routes() {
-        this.app.use('/api/v1/' + this.apiPaths.promotions, promotions_1.default);
-        this.app.use('/api/v1/' + this.apiPaths.carts, carts_1.default);
-        this.app.use('/api/v1/' + this.apiPaths.products, products_1.default);
+        this.app.use(general_1.generalPath + this.apiPaths.promotions, promotions_1.default);
+        this.app.use(general_1.generalPath + this.apiPaths.carts, carts_1.default);
+        this.app.use(general_1.generalPath + this.apiPaths.products, products_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

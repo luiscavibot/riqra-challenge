@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+import { FindOptions } from 'sequelize';
+import { createRules } from '../helpers/promotions/createPomotion';
 import { Action } from '../models/Action';
 import { Promotion } from '../models/Promotion';
 import { Rule } from '../models/Rule';
@@ -11,8 +12,6 @@ export const createPromotion = async (req: Request, res: Response) => {
 		validityPeriodStart,
 		validityPeriodExpiration,
 		activated,
-		skus,
-		greaterThan,
 	} = req.body;
 	try {
 		async function createPromotion() {
@@ -24,40 +23,16 @@ export const createPromotion = async (req: Request, res: Response) => {
 				activated,
 			});
 		}
-		async function createRules(newPromotion: any) {
-			rules.forEach(async (rule: any) => {
-				let { ruleType, skus, greaterThan } = rule;
-				let newRule: any = await Rule.create({
-					ruleType,
-					promotionId: newPromotion.id,
-					skus,
-					greaterThan,
-				});
-				await createActions(newRule.id, rule.actions);
-			});
-		}
-
-		async function createActions(newRule_id: any, rule_actions: any) {
-			rule_actions.forEach(async (action: any) => {
-				let { actionType, discountType, discountValue } = action;
-				await Action.create({
-					actionType,
-					discountType,
-					discountValue,
-					ruleId: newRule_id,
-				});
-			});
-		}
-
 		async function finalResponse(newPromotion: any) {
 			return res.status(201).json({
 				ok: true,
 				data: newPromotion,
+				rules: rules,
 				message: 'Promotion created successfully',
 			});
 		}
 		let newPromotion = await createPromotion();
-		await createRules(newPromotion);
+		await createRules(newPromotion, rules);
 		await finalResponse(newPromotion);
 	} catch (error) {
 		console.log(error);
@@ -69,20 +44,132 @@ export const createPromotion = async (req: Request, res: Response) => {
 };
 
 export const getPromotions = async (req: Request, res: Response) => {
-	const promotions = await Promotion.findAll({
+	const { id } = req.params;
+	let query: FindOptions = {
 		include: [
 			{
 				model: Rule,
 				include: [
 					{
 						model: Action,
+						attributes: {
+							exclude: ['id'],
+						},
 					},
 				],
+				attributes: {
+					exclude: ['id'],
+				},
 			},
 		],
-	});
+	};
+	id && (query = { ...query, where: { id } });
+	const promotions = await Promotion.findAll(query);
+	if (promotions.length === 0) {
+		return res.status(404).json({
+			ok: false,
+			msg: 'Promotions not found',
+		});
+	}
+	if (id) {
+		return res.json({
+			ok: true,
+			promotion: promotions[0],
+		});
+	}
 	res.json({
 		ok: true,
 		promotions,
 	});
+};
+
+export const updatePromotion = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	const {
+		name,
+		activated,
+		rules,
+		validityPeriodStart,
+		validityPeriodExpiration,
+	} = req.body;
+	try {
+		const promotion = await Promotion.findOne({
+			where: {
+				id,
+			},
+			include: [
+				{
+					model: Rule,
+					include: [
+						{
+							model: Action,
+						},
+					],
+				},
+			],
+		});
+		if (!promotion) {
+			return res.status(404).json({
+				ok: false,
+				msg: 'Promotion not found',
+			});
+		}
+		if (rules?.length > 0) {
+			await Rule.destroy({
+				where: {
+					promotionId: id,
+				},
+			});
+			await Action.destroy({
+				where: {
+					ruleId: id,
+				},
+			});
+			await createRules(promotion, rules);
+		}
+
+		await promotion.update({
+			name,
+			validityPeriodStart,
+			validityPeriodExpiration,
+			activated,
+		});
+
+		res.json({
+			ok: true,
+			msg: 'Promotion updated successfully',
+			id,
+			data: req.body,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ok: false,
+			msg: 'Please contact the administrator',
+		});
+	}
+};
+
+export const deletePromotion = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	try {
+		const promotion = await Promotion.findByPk(id);
+		if (!promotion) {
+			return res.status(404).json({
+				ok: false,
+				msg: 'Promotion not found',
+			});
+		}
+		await promotion.destroy();
+		res.json({
+			ok: true,
+			msg: 'Promotion deleted successfully',
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ok: false,
+			msg: 'Please contact the administrator',
+		});
+	}
 };

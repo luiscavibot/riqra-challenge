@@ -7,10 +7,28 @@ const validateFields_1 = require("../middlewares/validateFields");
 const validatePeriod_1 = require("../middlewares/validatePeriod");
 const validateActivatedPromotions_1 = require("../middlewares/validateActivatedPromotions");
 const rules_1 = require("../config/rules");
+const Promotion_1 = require("../models/Promotion");
 const router = (0, express_1.Router)();
 router.get('/', promotions_1.getPromotions);
+router.get('/:id', [
+    (0, express_validator_1.check)('id', 'Id is required').not().isEmpty(),
+    (0, express_validator_1.check)('id', 'Id should be a number').isNumeric(),
+    validateFields_1.validateFields,
+], promotions_1.getPromotions);
 router.post('/', [
     (0, express_validator_1.check)('name', 'Name is required').not().isEmpty(),
+    (0, express_validator_1.check)('name', 'Name be should be unique').custom((name) => {
+        return new Promise((resolve, reject) => {
+            Promotion_1.Promotion.findOne({ where: { name } }).then((promotion) => {
+                if (promotion) {
+                    reject(new Error('Name already in use. Please choose another one'));
+                }
+                else {
+                    resolve(true);
+                }
+            });
+        });
+    }),
     (0, express_validator_1.check)('name', 'Name should have minimum 3 characters').isLength({
         min: 3,
     }),
@@ -37,5 +55,13 @@ router.post('/', [
     }),
     validateFields_1.validateFields,
 ], promotions_1.createPromotion);
+router.put('/:id', [
+    (0, express_validator_1.check)('id', 'Id is required').not().isEmpty(),
+    (0, express_validator_1.check)('id', 'Id should be a number').isNumeric(),
+    validatePeriod_1.validatePeriod,
+    validateActivatedPromotions_1.validateActivatedPromotions,
+    validateFields_1.validateFields,
+], promotions_1.updatePromotion);
+router.delete('/:id', [(0, express_validator_1.check)('id', 'Id is required').not().isEmpty(), validateFields_1.validateFields], promotions_1.deletePromotion);
 exports.default = router;
 //# sourceMappingURL=promotions.js.map

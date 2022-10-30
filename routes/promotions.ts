@@ -1,19 +1,49 @@
 import { Router } from 'express';
-import { createPromotion, getPromotions } from '../controllers/promotions';
+import {
+	createPromotion,
+	deletePromotion,
+	getPromotions,
+	updatePromotion,
+} from '../controllers/promotions';
 import { check } from 'express-validator';
 import { validateFields } from '../middlewares/validateFields';
 import { validatePeriod } from '../middlewares/validatePeriod';
 import { validateActivatedPromotions } from '../middlewares/validateActivatedPromotions';
 import { rulesType } from '../config/rules';
+import { Promotion } from '../models/Promotion';
 
 const router = Router();
 
 router.get('/', getPromotions);
+router.get(
+	'/:id',
+	[
+		check('id', 'Id is required').not().isEmpty(),
+		check('id', 'Id should be a number').isNumeric(),
+		validateFields,
+	],
+	getPromotions
+);
 
 router.post(
 	'/',
 	[
 		check('name', 'Name is required').not().isEmpty(),
+		check('name', 'Name be should be unique').custom((name) => {
+			return new Promise((resolve, reject) => {
+				Promotion.findOne({ where: { name } }).then((promotion) => {
+					if (promotion) {
+						reject(
+							new Error(
+								'Name already in use. Please choose another one'
+							)
+						);
+					} else {
+						resolve(true);
+					}
+				});
+			});
+		}),
 		check('name', 'Name should have minimum 3 characters').isLength({
 			min: 3,
 		}),
@@ -49,4 +79,20 @@ router.post(
 	createPromotion
 );
 
+router.put(
+	'/:id',
+	[
+		check('id', 'Id is required').not().isEmpty(),
+		check('id', 'Id should be a number').isNumeric(),
+		validatePeriod,
+		validateActivatedPromotions,
+		validateFields,
+	],
+	updatePromotion
+);
+router.delete(
+	'/:id',
+	[check('id', 'Id is required').not().isEmpty(), validateFields],
+	deletePromotion
+);
 export default router;
