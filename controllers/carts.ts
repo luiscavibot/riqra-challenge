@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { TAX } from '../config/consts';
-import {
-	calculateSubTotal,
-	evaluatePromotions,
-} from '../helpers/promotions/promotionEngine';
+import { calculateSubTotal } from '../helpers/others/caculateSubtotal';
+import { evaluatePromotions } from '../helpers/promotions/promotionEngine';
 
 export const createCart = async (req: Request, res: Response) => {
 	const { lineItems } = req.body;
