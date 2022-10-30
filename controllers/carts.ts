@@ -3,7 +3,7 @@ import { TAX } from '../config/consts';
 import {
 	calculateSubTotal,
 	evaluatePromotions,
-} from '../helpers/promotionEngine';
+} from '../helpers/promotions/promotionEngine';
 
 export const createCart = async (req: Request, res: Response) => {
 	const { lineItems } = req.body;

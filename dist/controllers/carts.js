@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCart = void 0;
 const consts_1 = require("../config/consts");
-const promotionEngine_1 = require("../helpers/promotionEngine");
+const promotionEngine_1 = require("../helpers/promotions/promotionEngine");
 const createCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { lineItems } = req.body;
     const evaluatePromotionsResult = yield (0, promotionEngine_1.evaluatePromotions)(lineItems);

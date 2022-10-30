@@ -32,8 +32,7 @@ const createPromotion = (req, res) => __awaiter(void 0, void 0, void 0, function
             return __awaiter(this, void 0, void 0, function* () {
                 return res.status(201).json({
                     ok: true,
-                    data: newPromotion,
-                    rules: rules,
+                    data: Object.assign({ id: newPromotion.getDataValue('id') }, req.body),
                     message: 'Promotion created successfully',
                 });
             });
