@@ -18,6 +18,7 @@ export interface ValidatedPromotion {
 	updatedAt: Date;
 }
 //
+
 export interface PromotionItem {
 	id: number;
 	name: string;
@@ -30,18 +31,26 @@ export interface PromotionItem {
 }
 
 export interface Rule {
-	id: number;
+	id?: number;
 	ruleType: string;
-	skus: null;
+	skus?: null | string[];
 	greaterThan: number;
-	promotionId: number;
+	promotionId?: number;
 	actions: Action[];
 }
 
 export interface Action {
-	id: number;
+	id?: number;
 	actionType: string;
 	discountType: string;
 	discountValue: number;
-	ruleId: number;
+	ruleId?: number;
+}
+//Creation of a new promotion
+export interface PromotionoCreateObj {
+	name: string;
+	validityPeriodStart: Date;
+	validityPeriodExpiration: Date;
+	activated: boolean;
+	rules: Rule[];
 }

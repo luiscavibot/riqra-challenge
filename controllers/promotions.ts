@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { FindOptions } from 'sequelize';
+import { FindOptions, Model } from 'sequelize';
 import { createRules } from '../helpers/promotions/createPomotion';
+import { PromotionoCreateObj } from '../interfaces/promotions';
 import { Action } from '../models/Action';
 import { Promotion } from '../models/Promotion';
 import { Rule } from '../models/Rule';
@@ -23,7 +24,7 @@ export const createPromotion = async (req: Request, res: Response) => {
 				activated,
 			});
 		}
-		async function finalResponse(newPromotion: any) {
+		async function finalResponse(newPromotion: Model<PromotionoCreateObj>) {
 			return res.status(201).json({
 				ok: true,
 				data: newPromotion,
@@ -31,7 +32,7 @@ export const createPromotion = async (req: Request, res: Response) => {
 				message: 'Promotion created successfully',
 			});
 		}
-		let newPromotion = await createPromotion();
+		let newPromotion: Model<PromotionoCreateObj> = await createPromotion();
 		await createRules(newPromotion, rules);
 		await finalResponse(newPromotion);
 	} catch (error) {
