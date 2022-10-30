@@ -7,8 +7,8 @@ function validateProductSelectorRuleType(
 	lineItems: LineItem[]
 ) {
 	let lineItemsSkus = lineItems.map((lineItem) => lineItem.sku);
-	let isMatchWithSkusPromotion: boolean = lineItemsSkus.every((sku) =>
-		skus.includes(sku)
+	let isMatchWithSkusPromotion: boolean = skus.every((sku) =>
+		lineItemsSkus.includes(sku)
 	);
 	return isMatchWithSkusPromotion;
 }
@@ -26,10 +26,14 @@ export function validateRuleType(
 	greaterThan: number,
 	lineItems: LineItem[]
 ): boolean {
+	// console.log('ruleType......', ruleType);
 	if (ruleType === rulesType[0]) {
+		console.log("Regla de tipo 'PRODUCTSELECTOR'");
+
 		return validateProductSelectorRuleType(skus, lineItems);
 	}
 	if (ruleType === rulesType[1]) {
+		console.log("Regla de tipo 'CARTTOTAL'");
 		return validateCartTotalRuleType(greaterThan, lineItems);
 	}
 	return false;

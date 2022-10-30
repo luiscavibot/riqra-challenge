@@ -45,6 +45,7 @@ function getValidPromotions() {
 function evaluateRules(validatedPromotions, lineItems) {
     let evaluateRulesResponse = [];
     validatedPromotions.forEach((promotion) => {
+        console.log('promotion!!');
         promotion.getDataValue('rules').forEach((rule) => {
             let { ruleType, skus, greaterThan } = rule.dataValues;
             let isValidatedRule = (0, validateRuleType_1.validateRuleType)(ruleType, skus, greaterThan, lineItems);

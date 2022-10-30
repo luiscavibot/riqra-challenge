@@ -5,7 +5,7 @@ const rules_1 = require("../../config/rules");
 const caculateSubtotal_1 = require("../others/caculateSubtotal");
 function validateProductSelectorRuleType(skus, lineItems) {
     let lineItemsSkus = lineItems.map((lineItem) => lineItem.sku);
-    let isMatchWithSkusPromotion = lineItemsSkus.every((sku) => skus.includes(sku));
+    let isMatchWithSkusPromotion = skus.every((sku) => lineItemsSkus.includes(sku));
     return isMatchWithSkusPromotion;
 }
 function validateCartTotalRuleType(greaterThan, lineItems) {
@@ -16,10 +16,13 @@ function validateCartTotalRuleType(greaterThan, lineItems) {
     return false;
 }
 function validateRuleType(ruleType, skus, greaterThan, lineItems) {
+    // console.log('ruleType......', ruleType);
     if (ruleType === rules_1.rulesType[0]) {
+        console.log("Regla de tipo 'PRODUCTSELECTOR'");
         return validateProductSelectorRuleType(skus, lineItems);
     }
     if (ruleType === rules_1.rulesType[1]) {
+        console.log("Regla de tipo 'CARTTOTAL'");
         return validateCartTotalRuleType(greaterThan, lineItems);
     }
     return false;

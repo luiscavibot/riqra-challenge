@@ -42,6 +42,8 @@ function evaluateRules(
 ) {
 	let evaluateRulesResponse: EvaluatePromotionsResponse[] = [];
 	validatedPromotions.forEach((promotion: Model<PromotionType>) => {
+		console.log('promotion!!');
+
 		promotion.getDataValue('rules').forEach((rule: RuleType) => {
 			let { ruleType, skus, greaterThan } = rule.dataValues;
 
