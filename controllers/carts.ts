@@ -30,8 +30,6 @@ export const createCart = async (req: Request, res: Response) => {
 		},
 		0
 	);
-
-	// const taxes = parseFloat((lineItemsTotal * TAX).toFixed(2));
 	let subtotalWithDiscounts = parseFloat(
 		(subTotal - finaltotalDiscount).toFixed(2)
 	);

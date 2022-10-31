@@ -32,7 +32,6 @@ const createCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const lineItemsTotal = lineItems.reduce((acc, lineItem) => {
         return acc + lineItem.qty * lineItem.price;
     }, 0);
-    // const taxes = parseFloat((lineItemsTotal * TAX).toFixed(2));
     let subtotalWithDiscounts = parseFloat((subTotal - finaltotalDiscount).toFixed(2));
     let taxes = parseFloat((subtotalWithDiscounts * consts_1.TAX).toFixed(2));
     let totalToPay = parseFloat((subtotalWithDiscounts + taxes).toFixed(2));

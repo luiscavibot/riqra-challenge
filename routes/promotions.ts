@@ -11,6 +11,7 @@ import { validatePeriod } from '../middlewares/validatePeriod';
 import { validateActivatedPromotions } from '../middlewares/validateActivatedPromotions';
 import { rulesType } from '../config/rules';
 import { verifyUniquePromotionName } from '../helpers/promotions/createPomotion';
+import { actionsType, discountsType } from '../config/actions';
 
 const router = Router();
 
@@ -57,6 +58,17 @@ router.post(
 			'rules.*.ruleType',
 			`Rule type should be: ${rulesType.join(' or ')}`
 		).isIn(rulesType),
+
+		check('rules.*.actions', 'Rule type should be a array').isArray(),
+		check(
+			'rules.*.actions.*.actionType',
+			`Rule type should be: ${actionsType.join(' or ')}`
+		).isIn(actionsType),
+		check(
+			'rules.*.actions.*.discountType',
+			`Rule type should be: ${discountsType.join(' or ')}`
+		).isIn(discountsType),
+
 		check('rules.*.actions', 'Actions are required').not().isEmpty(),
 		check('rules.*.actions', 'Actions should be an array').isArray(),
 		check('rules.*.actions', 'Actions should be greater than 0').isLength({
@@ -70,8 +82,25 @@ router.post(
 router.put(
 	'/:id',
 	[
+		check('name', 'Name already is in use').custom(
+			verifyUniquePromotionName
+		),
 		check('id', 'Id is required').not().isEmpty(),
 		check('id', 'Id should be a number').isNumeric(),
+		check('rules.*.ruleType', 'Rule type should be a string').isString(),
+		check(
+			'rules.*.ruleType',
+			`Rule type should be: ${rulesType.join(' or ')}`
+		).isIn(rulesType),
+		check('rules.*.actions', 'Rule type should be a array').isArray(),
+		check(
+			'rules.*.actions.*.actionType',
+			`Rule type should be: ${actionsType.join(' or ')}`
+		).isIn(actionsType),
+		check(
+			'rules.*.actions.*.discountType',
+			`Rule type should be: ${discountsType.join(' or ')}`
+		).isIn(discountsType),
 		validatePeriod,
 		validateActivatedPromotions,
 		validateFields,

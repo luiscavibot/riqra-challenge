@@ -1,4 +1,4 @@
-import { Model } from 'sequelize';
+import { Model, Op, Validator } from 'sequelize';
 import {
 	ActionType,
 	PromotionType,
@@ -7,6 +7,7 @@ import {
 import { Action } from '../../models/Action';
 import { Promotion } from '../../models/Promotion';
 import { Rule } from '../../models/Rule';
+import { Request } from 'express';
 
 export async function createRules(
 	newPromotion: Model<PromotionType>,
