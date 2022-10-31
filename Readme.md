@@ -95,15 +95,25 @@ POST /promotions
 ```
 
 **name**: El nombre de la promoción.
+
 **validityPeriodStart**: Inicio del periodo de promoción.
+
 **validityPeriodExpiration**: Fin del periodo de promoción.
+
 **activated**: Inidica si la campaña está activa.
+
 **rules**: Reglas de la promoción a evaluar.
+
 **ruleType**: Tipo de regla. Solo se aceptán dos posibles valores: PRODUCTSELECTOR y CARTTOTAL.
+
 **actionType**: Tipo de acción. Actualmente solo se acepta un posible valor: CARTDISCOUNT.
+
 **discountType**: Tipo de descuento. Solo se aceptán dos descuentos: PERCENTAGE y FIXED.
+
 **greaterThan**: Campo complementario al campo actionType. Indica la cantidad a superar para aplicar el descuento señalado en discountValue para el ruleType del tipo CARTTOTAL.
+
 **discountValue**: Valor del descuento.
+
 **skus**: Arreglo de productos que deben estar incluidos en el carrito de compra para el ruleType del tipo PRODUCTSELECTOR.
 
 Ver todas las promociones registradas:
@@ -153,8 +163,11 @@ POST /promotions
 ```
 
 **lineItems**: Una matriz de productos.
+
 **skus**: Código de producto.
+
 **price**: Precio del producto.
+
 **qty**: Cantidad de ítems de un producto.
 
 ---
