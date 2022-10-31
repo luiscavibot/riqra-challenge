@@ -35,7 +35,7 @@ class Server {
     middlewares() {
         this.app.use((0, cors_1.default)());
         this.app.use(express_1.default.json());
-        this.app.use(express_1.default.static('public'));
+        // this.app.use(express.static('public'));
     }
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,6 +52,9 @@ class Server {
         this.app.use(general_1.generalPath + this.apiPaths.promotions, promotions_1.default);
         this.app.use(general_1.generalPath + this.apiPaths.carts, carts_1.default);
         this.app.use(general_1.generalPath + this.apiPaths.products, products_1.default);
+        this.app.all('*', (req, res) => {
+            res.status(404).send('404 - Not Found');
+        });
     }
     listen() {
         this.app.listen(this.port, () => {

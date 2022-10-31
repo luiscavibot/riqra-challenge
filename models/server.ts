@@ -24,7 +24,7 @@ class Server {
 	middlewares() {
 		this.app.use(cors());
 		this.app.use(express.json());
-		this.app.use(express.static('public'));
+		// this.app.use(express.static('public'));
 	}
 	async dbConnection() {
 		try {
@@ -38,6 +38,9 @@ class Server {
 		this.app.use(generalPath + this.apiPaths.promotions, promotionRoutes);
 		this.app.use(generalPath + this.apiPaths.carts, cartsRoutes);
 		this.app.use(generalPath + this.apiPaths.products, productsRoutes);
+		this.app.all('*', (req, res) => {
+			res.status(404).send('404 - Not Found');
+		});
 	}
 	listen() {
 		this.app.listen(this.port, () => {
