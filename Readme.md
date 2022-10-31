@@ -106,11 +106,58 @@ POST /promotions
 **discountValue**: Valor del descuento.
 **skus**: Arreglo de productos que deben estar incluidos en el carrito de compra para el ruleType del tipo PRODUCTSELECTOR.
 
-Creación de una promoción:
+Ver todas las promociones registradas:
 
 ```sh
-
+GET /promotions
 ```
+
+Ver una promoción registrada específica:
+
+```sh
+GET /promotions/:id
+```
+
+Actualizar una promoción:
+
+```sh
+PUT /promotions/:id
+*Body: Del mismo tipo usado en la creación de una promoción.
+```
+
+Borrar una promoción:
+
+```sh
+DELETE /promotions/:id
+```
+
+Creación de un Carrito de compra:
+
+```sh
+POST /promotions
+*body example:
+{
+  "lineItems": [
+      {
+        "sku": "apple",
+        "price": 2,
+        "qty": 1
+      },
+      {
+        "sku": "orange",
+        "price": 3,
+        "qty": 1
+      }
+  ]
+}
+```
+
+**lineItems**: Una matriz de productos.
+**skus**: Código de producto.
+**price**: Precio del producto.
+**qty**: Cantidad de ítems de un producto.
+
+---
 
 **AUTOR: Luis Castillo Villafuerte**  
 🤛 😎
