@@ -29,16 +29,10 @@ class Server {
 	async dbConnection() {
 		try {
 			// await db.authenticate();
-			await db.sync();
-			console.log('Database onlines');
-		} catch (error) {
-			console.error(error);
-		}
-	}
-	async dbDesconnection() {
-		try {
-			await db.close();
-			console.log('Database offlines');
+			const data = await db.sync();
+			console.log('Database online: ', data.config.database);
+
+			console.log();
 		} catch (error) {
 			console.error(error);
 		}

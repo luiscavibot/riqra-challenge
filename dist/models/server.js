@@ -41,19 +41,9 @@ class Server {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // await db.authenticate();
-                yield connection_1.default.sync();
-                console.log('Database onlines');
-            }
-            catch (error) {
-                console.error(error);
-            }
-        });
-    }
-    dbDesconnection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield connection_1.default.close();
-                console.log('Database offlines');
+                const data = yield connection_1.default.sync();
+                console.log('Database online: ', data.config.database);
+                console.log();
             }
             catch (error) {
                 console.error(error);
