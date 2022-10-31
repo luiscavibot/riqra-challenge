@@ -98,7 +98,7 @@ router.put(
 			`Rule type should be: ${actionsType.join(' or ')}`
 		).isIn(actionsType),
 		check(
-			'rules.*.actions.*.discountType',
+			'rules.*.actions.*.discountType.',
 			`Rule type should be: ${discountsType.join(' or ')}`
 		).isIn(discountsType),
 		validatePeriod,

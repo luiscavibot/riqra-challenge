@@ -3,5 +3,5 @@ import Server from './models/server';
 dotenv.config();
 
 const server = new Server();
-server.dbConnection();
+// server.dbConnection();
 server.listen();

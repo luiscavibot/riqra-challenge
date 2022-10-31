@@ -19,7 +19,7 @@ class Server {
 		this.port = process.env.PORT || '8000';
 		this.middlewares();
 		this.routes();
-		// this.dbConnection();
+		this.dbConnection();
 	}
 	middlewares() {
 		this.app.use(cors());
