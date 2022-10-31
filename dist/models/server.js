@@ -40,10 +40,8 @@ class Server {
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // await db.authenticate();
                 const data = yield connection_1.default.sync();
                 console.log('Database online: ', data.config.database);
-                console.log();
             }
             catch (error) {
                 console.error(error);

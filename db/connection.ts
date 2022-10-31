@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
-
+import dotenv from 'dotenv';
+dotenv.config();
 const dataBase =
 	process.env.NODE_ENV === 'production' ? process.env.DATABASE_NAME : 'riqra';
 const user =
@@ -13,8 +14,8 @@ const host =
 		? process.env.DATABASE_HOST
 		: 'localhost';
 
-const db = new Sequelize('test', 'admin', 'oaci12345', {
-	host: 'oaci.cp4gcmpufrc5.sa-east-1.rds.amazonaws.com',
+const db = new Sequelize(dataBase!, user!, password, {
+	host,
 	dialect: 'mysql',
 	port: 3306,
 });

@@ -28,11 +28,8 @@ class Server {
 	}
 	async dbConnection() {
 		try {
-			// await db.authenticate();
 			const data = await db.sync();
 			console.log('Database online: ', data.config.database);
-
-			console.log();
 		} catch (error) {
 			console.error(error);
 		}
