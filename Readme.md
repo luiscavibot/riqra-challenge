@@ -55,6 +55,63 @@ b) Cliente de base de datos local: http://localhost:8080
 
 (Servidor: db, Usuario: root, Contraseña: riqra, Base de datos: riqra)
 
+## Routes
+
+Creación de una promoción:
+
+```sh
+POST /promotions
+*body example:
+{
+    "name": "Nombre de la promoción",
+	"validityPeriodStart": "2022-10-27",
+	"validityPeriodExpiration": "2022-10-28",
+	"activated": false,
+	"rules": [
+		{
+			"ruleType": "PRODUCTSELECTOR",
+			"actions": [
+				{
+					"actionType": "CARTDISCOUNT",
+					"discountType": "FIXED",
+					"discountValue": 20
+				}
+			],
+			"skus": ["leche", "galleta"]
+		},
+		{
+			"ruleType": "CARTTOTAL",
+			"actions": [
+				{
+					"actionType": "CARTDISCOUNT",
+					"discountType": "PERCENTAGE",
+					"discountValue": 50
+				}
+			],
+			"greaterThan": 200
+		}
+	]
+}
+```
+
+**name**: El nombre de la promoción.
+**validityPeriodStart**: Inicio del periodo de promoción.
+**validityPeriodExpiration**: Fin del periodo de promoción.
+**activated**: Inidica si la campaña está activa.
+**rules**: Reglas de la promoción a evaluar.
+**ruleType**: Tipo de regla. Solo se aceptán dos posibles valores: PRODUCTSELECTOR y CARTTOTAL.
+**actionType**: Tipo de acción. Actualmente solo se acepta un posible valor: CARTDISCOUNT.
+**discountType**: Tipo de descuento. Solo se aceptán dos descuentos: PERCENTAGE y FIXED.
+**greaterThan**: Campo complementario al campo actionType. Indica la cantidad a superar para aplicar el descuento señalado en discountValue para el ruleType del tipo CARTTOTAL.
+**discountValue**: Valor del descuento.
+**skus**: Arreglo de productos que deben estar incluidos en el carrito de compra para el ruleType del tipo PRODUCTSELECTOR.
+
+Creación de una promoción:
+
+```sh
+
+```
+
 **AUTOR: Luis Castillo Villafuerte**  
 🤛 😎
 
