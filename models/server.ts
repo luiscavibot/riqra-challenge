@@ -19,7 +19,7 @@ class Server {
 		this.port = process.env.PORT || '8000';
 		this.middlewares();
 		this.routes();
-		this.dbConnection();
+		// this.dbConnection();
 	}
 	middlewares() {
 		this.app.use(cors());
@@ -28,9 +28,17 @@ class Server {
 	}
 	async dbConnection() {
 		try {
-			await db.authenticate();
+			// await db.authenticate();
 			await db.sync();
-			console.log('Database online');
+			console.log('Database onlines');
+		} catch (error) {
+			console.error(error);
+		}
+	}
+	async dbDesconnection() {
+		try {
+			await db.close();
+			console.log('Database offlines');
 		} catch (error) {
 			console.error(error);
 		}

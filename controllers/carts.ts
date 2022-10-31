@@ -46,7 +46,7 @@ export const createCart = async (req: Request, res: Response) => {
 			taxes,
 			totalToPay,
 		},
-		message: 'Cart created successfully',
+		message: 'Cart created successfully.',
 		lineItems,
 		ok: true,
 	});
