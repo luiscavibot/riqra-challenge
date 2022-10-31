@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import promotionRoutes from '../routes/promotions';
 import cartsRoutes from '../routes/carts';
-import productsRoutes from '../routes/products';
 import cors from 'cors';
 import db from '../db/connection';
 import { generalPath } from '../config/general';
@@ -37,7 +36,6 @@ class Server {
 	routes() {
 		this.app.use(generalPath + this.apiPaths.promotions, promotionRoutes);
 		this.app.use(generalPath + this.apiPaths.carts, cartsRoutes);
-		this.app.use(generalPath + this.apiPaths.products, productsRoutes);
 		this.app.all('*', (req, res) => {
 			res.status(404).send('404 - Not Found');
 		});

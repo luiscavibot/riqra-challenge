@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const promotions_1 = __importDefault(require("../routes/promotions"));
 const carts_1 = __importDefault(require("../routes/carts"));
-const products_1 = __importDefault(require("../routes/products"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 const general_1 = require("../config/general");
@@ -51,7 +50,6 @@ class Server {
     routes() {
         this.app.use(general_1.generalPath + this.apiPaths.promotions, promotions_1.default);
         this.app.use(general_1.generalPath + this.apiPaths.carts, carts_1.default);
-        this.app.use(general_1.generalPath + this.apiPaths.products, products_1.default);
         this.app.all('*', (req, res) => {
             res.status(404).send('404 - Not Found');
         });
