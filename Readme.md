@@ -48,8 +48,11 @@ npm run dev
 ```
 
 NOTA: URLs de servicios por defecto:
+
 a) Backend server: http://localhost:80
-b) Cliente de base de datos local: http://localhost:8080:
+
+b) Cliente de base de datos local: http://localhost:8080
+
 (Servidor: db, Usuario: root, Contraseña: riqra, Base de datos: riqra)
 
 **AUTOR: Luis Castillo Villafuerte**  
