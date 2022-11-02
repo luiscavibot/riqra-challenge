@@ -90,16 +90,16 @@ router.put(
 		check('rules.*.ruleType', 'Rule type should be a string').isString(),
 		check(
 			'rules.*.ruleType',
-			`Rule type should be: ${rulesType.join(' or ')}`
+			`ruleType type should be: ${rulesType.join(' or ')}`
 		).isIn(rulesType),
 		check('rules.*.actions', 'Rule type should be a array').isArray(),
 		check(
 			'rules.*.actions.*.actionType',
-			`Rule type should be: ${actionsType.join(' or ')}`
+			`actionType type should be: ${actionsType.join(' or ')}`
 		).isIn(actionsType),
 		check(
-			'rules.*.actions.*.discountType.',
-			`Rule type should be: ${discountsType.join(' or ')}`
+			'rules.*.actions.*.discountType',
+			`discountType type should be: ${discountsType.join(' or ')}`
 		).isIn(discountsType),
 		validatePeriod,
 		validateActivatedPromotions,
