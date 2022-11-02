@@ -17,6 +17,7 @@ Así mismo, usa el servicio de bases de datos relacionales Amazon RDS para la pe
 ## Development
 
 El proyecto se encuentra en el siguiente repositorio remoto: [https://github.com/luiscavibot/riqra-challenge.git]. Para implementar un entorno de desarrollo para el proyecto, proceda con los siguientes pasos.
+
 1.-Clone el proyecto:
 
 ```sh
@@ -60,7 +61,7 @@ b) Cliente de base de datos local: http://localhost:8080
 Creación de una promoción:
 
 ```sh
-POST /promotions
+POST /carts
 *body example:
 {
     "name": "Nombre de la promoción",
@@ -108,13 +109,13 @@ POST /promotions
 
 **actionType**: Tipo de acción. Actualmente solo se acepta un posible valor: CARTDISCOUNT.
 
-**discountType**: Tipo de descuento. Solo se aceptán dos descuentos: PERCENTAGE y FIXED.
+**discountType**: Tipo de descuento. Solo se aceptán dos tipos de descuentos: PERCENTAGE y FIXED.
 
-**greaterThan**: Campo complementario al campo actionType. Indica la cantidad a superar para aplicar el descuento señalado en discountValue para el ruleType del tipo CARTTOTAL.
+**greaterThan**: Este campo toma un valor cuando se elige el ruletype CARTTOTAL. Indica la cantidad a superar para aplicar el descuento señalado en discountValue.
 
-**discountValue**: Valor del descuento.
+**discountValue**: Valor del descuento tipo flotante. Si el discountType es PERCENTAGE, el valor declarado será considerado como un porcentaje y si fuese FIXED, el valor mantiene su naturaleza.
 
-**skus**: Arreglo de productos que deben estar incluidos en el carrito de compra para el ruleType del tipo PRODUCTSELECTOR.
+**skus**: Este campo toma un arreglo de strings cuando se elige el ruletype PRODUCTSELECTOR. Representa los productos que deben estar incluidos en el carrito de compra.
 
 Ver todas las promociones registradas:
 
