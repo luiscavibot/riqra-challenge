@@ -43,6 +43,9 @@ function createActions(newRule_id, rule_actions) {
 }
 exports.createActions = createActions;
 const verifyUniquePromotionName = (name) => {
+    if (!name) {
+        return Promise.resolve(true);
+    }
     return new Promise((resolve, reject) => {
         Promotion_1.Promotion.findOne({ where: { name } }).then((promotion) => {
             if (promotion) {

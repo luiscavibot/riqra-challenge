@@ -41,6 +41,9 @@ export async function createActions(
 }
 
 export const verifyUniquePromotionName = (name: string) => {
+	if (!name) {
+		return Promise.resolve(true);
+	}
 	return new Promise((resolve, reject) => {
 		Promotion.findOne({ where: { name } }).then((promotion) => {
 			if (promotion) {
